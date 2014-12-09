@@ -38,5 +38,8 @@ IB_DESIGNABLE
 
 @property (nonatomic, assign) IBInspectable BOOL imageOnOppositeDirection;
 @property (nonatomic, assign) IBInspectable BOOL respondsToRtl;
+@property (nonatomic, strong) IBInspectable UIColor *highlightedBackgroundColor;
+@property (nonatomic, strong) IBInspectable UIColor *disabledBackgroundColor;
+@property (nonatomic, strong) IBInspectable UIFont *selectedTitleLabelFont;
 
 @end

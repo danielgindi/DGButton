@@ -33,6 +33,13 @@
 #import "DGButton.h"
 
 @implementation DGButton
+{
+    UIColor *_originalBackgroundColor;
+    BOOL _isBackgroundColorSwitched;
+    
+    UIFont *_originalTitleLabelFont;
+    BOOL _isTitleLabelFontSwitched;
+}
 
 + (BOOL)isRtl
 {
@@ -68,6 +75,34 @@
     return self;
 }
 
+- (void)setHighlightedBackgroundColor:(UIColor *)highlightedBackgroundColor
+{
+    _highlightedBackgroundColor = highlightedBackgroundColor;
+    
+    [self _buttonModesUpdated];
+}
+
+- (void)setDisabledBackgroundColor:(UIColor *)disabledBackgroundColor
+{
+    _disabledBackgroundColor = disabledBackgroundColor;
+    
+    [self _buttonModesUpdated];
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+    [super setHighlighted:highlighted];
+    
+    [self _buttonModesUpdated];
+}
+
+- (void)setEnabled:(BOOL)enabled
+{
+    [super setEnabled:enabled];
+    
+    [self _buttonModesUpdated];
+}
+
 - (void)setImageOnOppositeDirection:(BOOL)imageOnOppositeDirection
 {
     _imageOnOppositeDirection = imageOnOppositeDirection;
@@ -78,6 +113,13 @@
 {
     _respondsToRtl = respondsToRtl;
     [self setNeedsLayout];
+}
+
+- (void)setSelected:(BOOL)selected
+{
+    [super setSelected:selected];
+    
+    [self _buttonModesUpdated];
 }
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
@@ -105,6 +147,56 @@
     else
     {
         return [super titleRectForContentRect:contentRect];
+    }
+}
+
+- (void)_buttonModesUpdated
+{
+    if (!_isBackgroundColorSwitched)
+    {
+        _originalBackgroundColor = self.backgroundColor;
+    }
+    if (!_isTitleLabelFontSwitched)
+    {
+        _originalTitleLabelFont = self.titleLabel.font;
+    }
+    
+    if (self.enabled)
+    {
+        if (self.highlighted && _highlightedBackgroundColor)
+        {
+            _isBackgroundColorSwitched = YES;
+            self.backgroundColor = _highlightedBackgroundColor;
+        }
+        else
+        {
+            _isBackgroundColorSwitched = NO;
+            self.backgroundColor = _originalBackgroundColor;
+        }
+    }
+    else
+    {
+        if (_disabledBackgroundColor)
+        {
+            _isBackgroundColorSwitched = YES;
+            self.backgroundColor = _disabledBackgroundColor;
+        }
+        else
+        {
+            _isBackgroundColorSwitched = NO;
+            self.backgroundColor = _originalBackgroundColor;
+        }
+    }
+    
+    if (self.selected && _selectedTitleLabelFont)
+    {
+        _isTitleLabelFontSwitched = YES;
+        self.titleLabel.font = _selectedTitleLabelFont;
+    }
+    else
+    {
+        _isTitleLabelFontSwitched = NO;
+        self.titleLabel.font = _originalTitleLabelFont;
     }
 }
 
