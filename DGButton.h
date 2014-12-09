@@ -33,9 +33,10 @@
 
 #import <UIKit/UIKit.h>
 
+IB_DESIGNABLE
 @interface DGButton : UIButton
 
-@property (nonatomic, assign) BOOL imageOnOppositeDirection;
-@property (nonatomic, assign) BOOL respondsToRtl;
+@property (nonatomic, assign) IBInspectable BOOL imageOnOppositeDirection;
+@property (nonatomic, assign) IBInspectable BOOL respondsToRtl;
 
 @end
