@@ -1,13 +1,16 @@
 DGButton
 ========
 
-A `UIButton` subclass with support for setting image on opposite side, and RTLing image position
+A `UIButton` subclass with support for more customization, including RTLing image position
 
 To use it just inherit your buttons from `DGButton` instead of `UIButton`.
 
-There are simply two properties:
+There are some simple properties:
 * `imageOnOppositeDirection` will put the image on the opposite position than the natural iOS image position relative to the text
 * `respondsToRtl` will invert the position in RTL locales. Defaults to `YES`. If your app is not localized to RTL locales it will not affect you.
+* `highlightedBackgroundColor` is a background color to be used when the button is highlighted
+* `disabledBackgroundColor` is a background color to be used when the button is disabled
+* `selectedTitleLabelFont` is a backgroundfont to be used when the button is "selected"
 
 You can set the values of those properties also through Interface Builder, with custom attributes.
 
