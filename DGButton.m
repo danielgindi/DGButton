@@ -75,6 +75,18 @@
     return self;
 }
 
+- (void)setBackgroundColor:(UIColor *)backgroundColor
+{
+    if (_isBackgroundColorSwitched)
+    {
+        _originalBackgroundColor = backgroundColor;
+    }
+    else
+    {
+        [super setBackgroundColor:backgroundColor];
+    }
+}
+
 - (void)setHighlightedBackgroundColor:(UIColor *)highlightedBackgroundColor
 {
     _highlightedBackgroundColor = highlightedBackgroundColor;
