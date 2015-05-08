@@ -178,12 +178,12 @@
         if (self.highlighted && _highlightedBackgroundColor)
         {
             _isBackgroundColorSwitched = YES;
-            self.backgroundColor = _highlightedBackgroundColor;
+            super.backgroundColor = _highlightedBackgroundColor;
         }
         else
         {
             _isBackgroundColorSwitched = NO;
-            self.backgroundColor = _originalBackgroundColor;
+            super.backgroundColor = _originalBackgroundColor;
         }
     }
     else
@@ -191,12 +191,12 @@
         if (_disabledBackgroundColor)
         {
             _isBackgroundColorSwitched = YES;
-            self.backgroundColor = _disabledBackgroundColor;
+            super.backgroundColor = _disabledBackgroundColor;
         }
         else
         {
             _isBackgroundColorSwitched = NO;
-            self.backgroundColor = _originalBackgroundColor;
+            super.backgroundColor = _originalBackgroundColor;
         }
     }
     
