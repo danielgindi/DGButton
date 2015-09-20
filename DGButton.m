@@ -32,7 +32,8 @@
 
 #import "DGButton.h"
 
-typedef struct {
+typedef struct
+{
     BOOL rtl;
     BOOL imageOnTheRight;
     UIControlContentHorizontalAlignment contentHorizontalAlignment;
@@ -51,8 +52,8 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
     if (state1.contentVerticalAlignment != state2.contentVerticalAlignment) return NO;
     if (!UIEdgeInsetsEqualToEdgeInsets(state1.contentEdgeInsets, state2.contentEdgeInsets)) return NO;
     if (!UIEdgeInsetsEqualToEdgeInsets(state1.imageEdgeInsets, state2.imageEdgeInsets)) return NO;
-    if (!UIEdgeInsetsEqualToEdgeInsets(state2.titleEdgeInsets, state2.titleEdgeInsets)) return NO;
-    if (!CGRectEqualToRect(state2.bounds, state2.bounds)) return NO;
+    if (!UIEdgeInsetsEqualToEdgeInsets(state1.titleEdgeInsets, state2.titleEdgeInsets)) return NO;
+    if (!CGRectEqualToRect(state1.bounds, state2.bounds)) return NO;
     return YES;
 }
 
