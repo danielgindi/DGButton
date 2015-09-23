@@ -205,6 +205,8 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
     fitInSize = contentRect.size;
     fitInSize.width -= state.imageEdgeInsets.left + state.imageEdgeInsets.right;
     fitInSize.height -= state.imageEdgeInsets.top + state.imageEdgeInsets.bottom;
+    fitInSize.width = MAX(fitInSize.width, 0.f);
+    fitInSize.height = MAX(fitInSize.height, 0.f);
     imageRect.size = _lastPresentationImage.size;
     if (imageRect.size.width > fitInSize.width || imageRect.size.height > fitInSize.height)
     {
@@ -217,6 +219,8 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
     
     // Determine available area for title
     fitInSize = CGSizeMake(contentRect.size.width - imageRect.size.width - state.imageEdgeInsets.left - state.imageEdgeInsets.right, contentRect.size.height - state.imageEdgeInsets.top - state.imageEdgeInsets.bottom);
+    fitInSize.width = MAX(fitInSize.width, 0.f);
+    fitInSize.height = MAX(fitInSize.height, 0.f);
     titleRect.size = [self.titleLabel sizeThatFits:fitInSize];
     
     // Calculate vertical placement of title and image
