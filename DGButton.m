@@ -32,8 +32,7 @@
 
 #import "DGButton.h"
 
-typedef struct
-{
+typedef struct {
     BOOL rtl;
     BOOL imageOnTheRight;
     UIControlContentHorizontalAlignment contentHorizontalAlignment;
@@ -73,12 +72,17 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
     CGRect _lastContentRect;
     CGRect _lastImageRect;
     CGRect _lastTitleRect;
+    
+    // This one is for allowing the UIButtonLabel to be created without intefering with its process, causing weird bugs...
+    BOOL _didCreateTitleLabel;
 }
 
 - (void)initialize_DGButton
 {
     _respondsToRtl = YES;
     _imageOnOppositeDirection = NO;
+    
+    _didCreateTitleLabel = NO;
     
     _hasSemanticDirection = ([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending);
 }
@@ -221,6 +225,9 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
     fitInSize = CGSizeMake(contentRect.size.width - imageRect.size.width - state.imageEdgeInsets.left - state.imageEdgeInsets.right, contentRect.size.height - state.imageEdgeInsets.top - state.imageEdgeInsets.bottom);
     fitInSize.width = MAX(fitInSize.width, 0.f);
     fitInSize.height = MAX(fitInSize.height, 0.f);
+    
+    //[self updateSizingTitleLabel];
+    
     titleRect.size = [self.titleLabel sizeThatFits:fitInSize];
     
     // Calculate vertical placement of title and image
@@ -319,6 +326,12 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
 
 - (CGRect)contentRectForBounds:(CGRect)bounds
 {
+    if (!_didCreateTitleLabel)
+    {
+        _didCreateTitleLabel = YES;
+        return [super contentRectForBounds:bounds];
+    }
+    
     [self calculateRectsIfNeededForBounds:bounds];
     
     return _lastContentRect;
@@ -326,16 +339,31 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
+    if (!_didCreateTitleLabel)
+    {
+        return [super imageRectForContentRect:contentRect];
+    }
+    
     return _lastImageRect;
 }
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect
 {
+    if (!_didCreateTitleLabel)
+    {
+        return [super titleRectForContentRect:contentRect];
+    }
+    
     return _lastTitleRect;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
+    if (!_didCreateTitleLabel)
+    {
+        return [super sizeThatFits:size];
+    }
+    
     CGSize imageSize = self.currentImage.size;
     CGSize titleSize = [self.titleLabel sizeThatFits:size];
     CGSize newSize;
