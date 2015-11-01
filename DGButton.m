@@ -383,7 +383,7 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
     }
     else
     {
-        newSize.width = MAX(imageSize.height, titleSize.height);
+        newSize.height = MAX(imageSize.height, titleSize.height);
     }
     
     newSize.width = MIN(newSize.width, size.width);
