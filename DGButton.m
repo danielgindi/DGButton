@@ -88,7 +88,12 @@ BOOL _hasCreateTitleBug;
     NSString *iosVersion = [[UIDevice currentDevice] systemVersion];
     
     _hasSemanticDirection = [iosVersion compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending;
+    
+#if !TARGET_INTERFACE_BUILDER
     _hasCreateTitleBug = [iosVersion compare:@"9.2" options:NSNumericSearch] == NSOrderedAscending;
+#else
+    _hasCreateTitleBug = [iosVersion compare:@"10.0" options:NSNumericSearch] == NSOrderedAscending;
+#endif
 }
 
 - (void)initialize_DGButton
