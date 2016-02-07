@@ -64,7 +64,6 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
     UIFont *_originalTitleLabelFont;
     BOOL _isTitleLabelFontSwitched;
     
-    BOOL _hasSemanticDirection;
     
     PresentationState _lastPresentationState;
     UIImage *_lastPresentationImage;
@@ -77,14 +76,25 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
     BOOL _didCreateTitleLabel;
 }
 
+BOOL _hasSemanticDirection;
+BOOL _hasCreateTitleBug;
+
++ (void)initialize
+{
+    [super initialize];
+    
+    NSString *iosVersion = [[UIDevice currentDevice] systemVersion];
+    
+    _hasSemanticDirection = [iosVersion compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending;
+    _hasCreateTitleBug = [iosVersion compare:@"9.2" options:NSNumericSearch] == NSOrderedAscending;
+}
+
 - (void)initialize_DGButton
 {
     _respondsToRtl = YES;
     _imageOnOppositeDirection = NO;
     
     _didCreateTitleLabel = NO;
-    
-    _hasSemanticDirection = ([[[UIDevice currentDevice] systemVersion] compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending);
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -326,9 +336,9 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
 
 - (CGRect)contentRectForBounds:(CGRect)bounds
 {
-    if (!_didCreateTitleLabel)
+    if ((_hasCreateTitleBug && !_didCreateTitleLabel) ||
+        (!_hasCreateTitleBug && !self.titleLabel))
     {
-        _didCreateTitleLabel = YES;
         return [super contentRectForBounds:bounds];
     }
     
@@ -339,7 +349,8 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
-    if (!_didCreateTitleLabel)
+    if ((_hasCreateTitleBug && !_didCreateTitleLabel) ||
+        (!_hasCreateTitleBug && !self.titleLabel))
     {
         return [super imageRectForContentRect:contentRect];
     }
@@ -349,8 +360,10 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect
 {
-    if (!_didCreateTitleLabel)
+    if ((_hasCreateTitleBug && !_didCreateTitleLabel) ||
+        (!_hasCreateTitleBug && !self.titleLabel))
     {
+        _didCreateTitleLabel = YES;
         return [super titleRectForContentRect:contentRect];
     }
     
@@ -359,7 +372,8 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-    if (!_didCreateTitleLabel)
+    if ((_hasCreateTitleBug && !_didCreateTitleLabel) ||
+        (!_hasCreateTitleBug && !self.titleLabel))
     {
         return [super sizeThatFits:size];
     }
