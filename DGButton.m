@@ -74,6 +74,8 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
     
     // This one is for allowing the UIButtonLabel to be created without intefering with its process, causing weird bugs...
     BOOL _didCreateTitleLabel;
+    
+    BOOL _isInContentRectGetter;
 }
 
 BOOL _hasSemanticDirection;
@@ -336,13 +338,22 @@ BOOL _hasCreateTitleBug;
 
 - (CGRect)contentRectForBounds:(CGRect)bounds
 {
+    if (_isInContentRectGetter)
+    {
+        return [super contentRectForBounds:bounds];
+    }
+    
     if ((_hasCreateTitleBug && !_didCreateTitleLabel) ||
         (!_hasCreateTitleBug && !self.titleLabel))
     {
         return [super contentRectForBounds:bounds];
     }
     
+    _isInContentRectGetter = YES; // Safeguard
+    
     [self calculateRectsIfNeededForBounds:bounds];
+    
+    _isInContentRectGetter = NO;
     
     return _lastContentRect;
 }
