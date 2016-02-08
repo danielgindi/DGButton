@@ -79,7 +79,6 @@ static inline BOOL presentationStateEqualToPresentationState(PresentationState s
 }
 
 BOOL _hasSemanticDirection;
-BOOL _hasCreateTitleBug;
 
 + (void)initialize
 {
@@ -88,12 +87,6 @@ BOOL _hasCreateTitleBug;
     NSString *iosVersion = [[UIDevice currentDevice] systemVersion];
     
     _hasSemanticDirection = [iosVersion compare:@"9.0" options:NSNumericSearch] != NSOrderedAscending;
-    
-#if !TARGET_INTERFACE_BUILDER
-    _hasCreateTitleBug = [iosVersion compare:@"9.2" options:NSNumericSearch] == NSOrderedAscending;
-#else
-    _hasCreateTitleBug = [iosVersion compare:@"10.0" options:NSNumericSearch] == NSOrderedAscending;
-#endif
 }
 
 - (void)initialize_DGButton
@@ -343,13 +336,7 @@ BOOL _hasCreateTitleBug;
 
 - (CGRect)contentRectForBounds:(CGRect)bounds
 {
-    if (_isInContentRectGetter)
-    {
-        return [super contentRectForBounds:bounds];
-    }
-    
-    if ((_hasCreateTitleBug && !_didCreateTitleLabel) ||
-        (!_hasCreateTitleBug && !self.titleLabel))
+    if (_isInContentRectGetter || !_didCreateTitleLabel)
     {
         return [super contentRectForBounds:bounds];
     }
@@ -365,8 +352,7 @@ BOOL _hasCreateTitleBug;
 
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
-    if ((_hasCreateTitleBug && !_didCreateTitleLabel) ||
-        (!_hasCreateTitleBug && !self.titleLabel))
+    if (!_didCreateTitleLabel)
     {
         return [super imageRectForContentRect:contentRect];
     }
@@ -376,8 +362,7 @@ BOOL _hasCreateTitleBug;
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect
 {
-    if ((_hasCreateTitleBug && !_didCreateTitleLabel) ||
-        (!_hasCreateTitleBug && !self.titleLabel))
+    if (!_didCreateTitleLabel)
     {
         _didCreateTitleLabel = YES;
         return [super titleRectForContentRect:contentRect];
@@ -388,8 +373,7 @@ BOOL _hasCreateTitleBug;
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-    if ((_hasCreateTitleBug && !_didCreateTitleLabel) ||
-        (!_hasCreateTitleBug && !self.titleLabel))
+    if (!_didCreateTitleLabel)
     {
         return [super sizeThatFits:size];
     }
