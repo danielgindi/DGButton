@@ -238,7 +238,14 @@ BOOL _hasSemanticDirection;
     
     //[self updateSizingTitleLabel];
     
-    titleRect.size = [self.titleLabel sizeThatFits:fitInSize];
+    if (self.titleLabel.hidden)
+    {
+        titleRect.size = CGSizeZero;
+    }
+    else
+    {
+        titleRect.size = [self.titleLabel sizeThatFits:fitInSize];
+    }
     
     // Calculate vertical placement of title and image
     switch (state.contentVerticalAlignment)
