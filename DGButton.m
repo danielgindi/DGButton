@@ -193,6 +193,14 @@ BOOL _hasSemanticDirection;
     state.imageEdgeInsets = self.imageEdgeInsets;
     state.titleEdgeInsets = self.titleEdgeInsets;
     
+    if (_lastPresentationImage.size.width == 0.f)
+    {
+        state.imageEdgeInsets.left = 0.f;
+        state.imageEdgeInsets.top = 0.f;
+        state.imageEdgeInsets.right = 0.f;
+        state.imageEdgeInsets.bottom = 0.f;
+    }
+    
     if (presentationStateEqualToPresentationState(state, _lastPresentationState) && _lastPresentationImage == self.currentImage && _lastPresentationTitle == self.currentTitle)
     {
         return;
@@ -232,7 +240,14 @@ BOOL _hasSemanticDirection;
     }
     
     // Determine available area for title
-    fitInSize = CGSizeMake(contentRect.size.width - imageRect.size.width - state.imageEdgeInsets.left - state.imageEdgeInsets.right, contentRect.size.height - state.imageEdgeInsets.top - state.imageEdgeInsets.bottom);
+    fitInSize = CGSizeMake(
+                           contentRect.size.width -
+                           imageRect.size.width -
+                           state.imageEdgeInsets.left -
+                           state.imageEdgeInsets.right,
+                           contentRect.size.height -
+                           state.imageEdgeInsets.top -
+                           state.imageEdgeInsets.bottom);
     fitInSize.width = MAX(fitInSize.width, 0.f);
     fitInSize.height = MAX(fitInSize.height, 0.f);
     
