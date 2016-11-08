@@ -350,6 +350,16 @@ BOOL _hasSemanticDirection;
         titleRect.origin.x = contentRect.size.width - (titleRect.origin.x - contentRect.origin.x) - titleRect.size.width + contentRect.origin.x;
     }
     
+    if (titleRect.origin.x < 0)
+    {
+        titleRect.size.width += titleRect.origin.x;
+        titleRect.origin.x = 0.0;
+    }
+    if (titleRect.size.width > bounds.size.width)
+    {
+        titleRect.size.width = bounds.size.width;
+    }
+    
     // Save calculations for the next time
     _lastContentRect = contentRect;
     _lastImageRect = imageRect;
